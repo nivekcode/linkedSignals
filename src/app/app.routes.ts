@@ -6,8 +6,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/basic/basic.component').then(m => m.BasicComponent)
   },
   {
+    path: 'product-chooser',
+    loadComponent: () => import('./features/product-chooser/product-chooser.component').then(m => m.ProductChooserComponent)
+  },
+  {
     path: '',
-    redirectTo: 'basic',
+    redirectTo: 'product-chooser',
     pathMatch: 'full'
   }
 ];
