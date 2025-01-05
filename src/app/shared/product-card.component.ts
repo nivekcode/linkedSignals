@@ -13,47 +13,64 @@ import {Product} from '../core/product.service';
         <div class="btn-bar">
           <button
             [disabled]="amount() === 1"
-            (click)="remove()" class="btn is-remove">-</button>
+            (click)="remove()" class="btn is-remove">-
+          </button>
           <button (click)="add()" class="btn is-add">+</button>
         </div>
       </div>
-      <p>
-        {{ product().description }}
-      </p>
-      <div class="amount">
-        <small>Amount:</small> {{ amount() }}
-      </div>
-      <div class="price">
-        <small>Price per item:</small> {{ product().price | currency:'CHF ' }}
-      </div>
-      <div class="price">
-        <small>Total:</small> {{ total() | currency:'CHF ' }}
-      </div>
+      <div>
+        <div class="description">
+          {{ product().description }}
+        </div>
+        <div class="pricing-row">
+          <div class="amount">
+            <small>Amount:</small>
+            {{ amount() }}
+          </div>
+          <div class="price">
+            <small>Price per item:</small> {{ product().price | currency }}
+          </div>
+          <div class="price is-total">
+            <small>Total:</small> <span>{{ total() | currency }}</span>
+          </div>
+        </div>
 
-      <div class="btn-bar margin-t-md stretch">
-        <button (click)="prev.emit()" class="product-chooser-btn">Previous product</button>
-        <button (click)="next.emit()" class="product-chooser-btn">Next product</button>
-      </div>
+        <div class="btn-bar space-between margin-t-md">
 
-    </div>
+          <select>
+            @for (shippingOption of product().shippingOptions; track shippingOption) {
+              <option [attr.selected]="desiredShippingOption() === shippingOption ? 'selected' : null">{{ shippingOption }}</option>
+            }
+          </select>
+
+          <div class="btn-bar">
+            <button (click)="prev.emit()" class="btn"><</button>
+            <button (click)="next.emit()" class="btn">></button>
+            <button class="btn is-yellow">
+          <span class="material-symbols-outlined">
+add_shopping_cart
+</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
   `,
   styles: `
-    .product-chooser-btn {
-      border-radius: 12px;
-      padding: 8px;
-      border: none;
-      flex: 1;
-      background: blue;
-      height: 40px;
-      font-size: 18px;
-      color: white;
-      cursor: pointer;
-    }
 
+    .pricing-row {
+      margin-top: 12px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #f7f3f3;
+      border-bottom: 1px solid #f7f3f3;
+    }
 
     img {
       width: 100%;
-      max-height: 200px;
+      max-height: 248px;
       object-fit: cover;
       border-radius: 12px;
     }
@@ -61,23 +78,35 @@ import {Product} from '../core/product.service';
     .btn-bar {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 8px;
+
+      &.space-between {
+        justify-content: space-between;
+      }
 
       &.stretch {
         justify-content: stretch;
+      }
+
+      &.end {
+        justify-content: flex-end;
       }
     }
 
     .amount,
     .price {
       display: flex;
-      align-items: center;
-      justify-content: end;
-      font-size: 28px;
+      flex-direction: column;
+      align-items: end;
+      justify-content: center;
+      font-size: 20px;
       font-weight: bold;
 
       small {
-        margin-right: 20px;
+        font-size: 12px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 300;
+        color: #746969;
       }
 
     }
@@ -86,25 +115,33 @@ import {Product} from '../core/product.service';
       height: 40px;
       width: 40px;
       border-radius: 50%;
-      background: red;
-      color: white;
-      font-size: 32px;
-      font-family: "Roboto", sans-serif;
-      border: none;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Baloo 2", sans-serif;
       cursor: pointer;
+      background: #f2ebeb;
+      box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.1),
+      inset 0 2px 4px rgba(255, 255, 255, 0.25),
+      inset 0 -2px 4px rgba(255, 255, 255, 0.1);
+      border: 1px solid white;
 
-      &.is-remove {
-        background: red;
-      }
-
-      &.is-add {
-        background: blue;
+      &.is-yellow {
+        background: #e6e61c;
       }
 
       &.is-remove[disabled] {
-        background: #9d9d9d;
-        color: #595757;
+        background: #dcc6c6;
+        color: #6f6969;
       }
+    }
+
+    .description {
+      padding-bottom: 12px;
+      font-size: 16px;
+      font-weight: 300;
+      font-family: "Roboto", sans-serif;
     }
 
     .header {
@@ -124,6 +161,20 @@ export class ProductCardComponent {
   amount = linkedSignal({
     source: this.product,
     computation: () => 1
+  });
+
+  desiredShippingOption = linkedSignal<Product, string>({
+    source: this.product,
+    computation: (source, previous) => {
+
+      if(!previous){
+        return source.shippingOptions[0];
+      }
+
+      return source.shippingOptions.includes(previous.value)
+        ? previous.value
+        : source.shippingOptions[0];
+    }
   });
 
   total = computed(() => {

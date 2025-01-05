@@ -4,8 +4,9 @@ import {ProductCardComponent} from '../../shared/product-card.component';
 import {ProductService} from '../../core/product.service';
 
 @Component({
-  selector: 'product-chooser',
+  selector: 'product-chooser-with-shipment',
   template: `
+    <h1>Procut with shipment</h1>
     <product-card
       [product]="selectedProduct()"
       (next)="nextProduct()"
@@ -15,16 +16,16 @@ import {ProductService} from '../../core/product.service';
   imports: [ProductCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductChooserComponent {
+export class ProductChooserWithShipmentComponent {
   #productService = inject(ProductService);
-  #PRODUCTS = this.#productService.PRODUCTS;
+#PRODUCTS = this.#productService.PRODUCTS_WITH_SHIPMENT;
 
   index = signal(0);
   selectedProduct = computed(() => this.#PRODUCTS[this.index()]);
 
   nextProduct() {
     this.index.update(v => {
-      if (v < this.#productService.PRODUCTS.length - 1) {
+      if (v < this.#PRODUCTS.length - 1) {
         return v + 1;
       }
       return 0;
@@ -36,7 +37,7 @@ export class ProductChooserComponent {
       if (v > 0) {
         return v - 1;
       }
-      return this.#productService.PRODUCTS.length - 1;
+      return this.#PRODUCTS.length - 1;
     });
   }
 }
