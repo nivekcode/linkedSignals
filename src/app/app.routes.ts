@@ -14,8 +14,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/product-chooser-with-shipment/product-chooser-with-shipment.component').then(m => m.ProductChooserWithShipmentComponent)
   },
   {
+    path: 'todo-list',
+    loadComponent: () => import('./features/todo-list/todo-list.component').then(m => m.TodoListComponent)
+  },
+  {
     path: '',
-    redirectTo: 'product-chooser-with-shipment',
+    redirectTo: 'todo-list',
     pathMatch: 'full'
   }
 ];

@@ -18,7 +18,7 @@ import {ProductService} from '../../core/product.service';
 })
 export class ProductChooserWithShipmentComponent {
   #productService = inject(ProductService);
-#PRODUCTS = this.#productService.PRODUCTS_WITH_SHIPMENT;
+  #PRODUCTS = this.#productService.PRODUCTS_WITH_SHIPMENT;
 
   index = signal(0);
   selectedProduct = computed(() => this.#PRODUCTS[this.index()]);
