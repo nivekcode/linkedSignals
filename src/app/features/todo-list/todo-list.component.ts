@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, linkedSignal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, inject, linkedSignal, signal} from '@angular/core';
 import {Todo, TodosService} from '../../core/todos.service';
 import {toSignal} from '@angular/core/rxjs-interop';
 
@@ -118,7 +118,8 @@ keyboard_arrow_down
 export class TodoListComponent {
   #todosService = inject(TodosService);
 
-  todos = linkedSignal<Todo[]>(toSignal(this.#todosService.getTodos(), {
+  todos = linkedSignal<Todo[]>(toSignal(
+    this.#todosService.getTodos(), {
       initialValue: []
     })
   );
@@ -151,7 +152,7 @@ export class TodoListComponent {
     });
   }
 
-  refresh(){
+  refresh() {
     this.#todosService.refresh();
   }
 }

@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/product-chooser/product-chooser.component').then(m => m.ProductChooserComponent)
   },
   {
+    path: 'product-chooser-old',
+    loadComponent: () => import('./features/product-chooser-old/product-chooser-old.component').then(m => m.ProductChooserOldComponent)
+  },
+  {
     path: 'product-chooser-with-shipment',
     loadComponent: () => import('./features/product-chooser-with-shipment/product-chooser-with-shipment.component').then(m => m.ProductChooserWithShipmentComponent)
   },
@@ -19,7 +23,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'todo-list',
+    redirectTo: 'product-chooser-old',
     pathMatch: 'full'
   }
 ];
