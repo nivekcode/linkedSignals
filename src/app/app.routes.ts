@@ -26,8 +26,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/product-chooser-single-state/product-chooser-single-state.component').then(m => m.ProductChooserSingleStateComponent)
   },
   {
+    path: 'form-example',
+    loadComponent: () => import('./features/forms/form.component').then(m => m.FormExampleComponent)
+  },
+  {
     path: '',
-    redirectTo: 'product-chooser-single-state',
+    redirectTo: 'form-example',
     pathMatch: 'full'
   }
 ];
