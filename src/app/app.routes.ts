@@ -22,8 +22,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/todo-list/todo-list.component').then(m => m.TodoListComponent)
   },
   {
+    path: 'product-chooser-single-state',
+    loadComponent: () => import('./features/product-chooser-single-state/product-chooser-single-state.component').then(m => m.ProductChooserSingleStateComponent)
+  },
+  {
     path: '',
-    redirectTo: 'product-chooser-old',
+    redirectTo: 'product-chooser-single-state',
     pathMatch: 'full'
   }
 ];
